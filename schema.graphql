@@ -254,6 +254,143 @@ input TagCreateInput {
   posts: PostRelateToManyForCreateInput
 }
 
+type Metric {
+  id: ID!
+  drive: Int
+  play: Int
+  defensiveCall: String
+}
+
+input MetricWhereUniqueInput {
+  id: ID
+}
+
+input MetricWhereInput {
+  AND: [MetricWhereInput!]
+  OR: [MetricWhereInput!]
+  NOT: [MetricWhereInput!]
+  id: IDFilter
+  drive: IntFilter
+  play: IntFilter
+  defensiveCall: StringFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input MetricOrderByInput {
+  id: OrderDirection
+  drive: OrderDirection
+  play: OrderDirection
+  defensiveCall: OrderDirection
+}
+
+input MetricUpdateInput {
+  drive: Int
+  play: Int
+  defensiveCall: String
+}
+
+input MetricUpdateArgs {
+  where: MetricWhereUniqueInput!
+  data: MetricUpdateInput!
+}
+
+input MetricCreateInput {
+  drive: Int
+  play: Int
+  defensiveCall: String
+}
+
+type Game {
+  id: ID!
+  title: String
+  content: Game_content_Document
+  author: User
+}
+
+type Game_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input GameWhereUniqueInput {
+  id: ID
+}
+
+input GameWhereInput {
+  AND: [GameWhereInput!]
+  OR: [GameWhereInput!]
+  NOT: [GameWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  author: UserWhereInput
+}
+
+input GameOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+}
+
+input GameUpdateInput {
+  title: String
+  content: JSON
+  author: UserRelateToOneForUpdateInput
+}
+
+input GameUpdateArgs {
+  where: GameWhereUniqueInput!
+  data: GameUpdateInput!
+}
+
+input GameCreateInput {
+  title: String
+  content: JSON
+  author: UserRelateToOneForCreateInput
+}
+
+type MetricType {
+  id: ID!
+  name: String
+}
+
+input MetricTypeWhereUniqueInput {
+  id: ID
+}
+
+input MetricTypeWhereInput {
+  AND: [MetricTypeWhereInput!]
+  OR: [MetricTypeWhereInput!]
+  NOT: [MetricTypeWhereInput!]
+  id: IDFilter
+  name: StringFilter
+}
+
+input MetricTypeOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input MetricTypeUpdateInput {
+  name: String
+}
+
+input MetricTypeUpdateArgs {
+  where: MetricTypeWhereUniqueInput!
+  data: MetricTypeUpdateInput!
+}
+
+input MetricTypeCreateInput {
+  name: String
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -278,6 +415,24 @@ type Mutation {
   updateTags(data: [TagUpdateArgs!]!): [Tag]
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
+  createMetric(data: MetricCreateInput!): Metric
+  createMetrics(data: [MetricCreateInput!]!): [Metric]
+  updateMetric(where: MetricWhereUniqueInput!, data: MetricUpdateInput!): Metric
+  updateMetrics(data: [MetricUpdateArgs!]!): [Metric]
+  deleteMetric(where: MetricWhereUniqueInput!): Metric
+  deleteMetrics(where: [MetricWhereUniqueInput!]!): [Metric]
+  createGame(data: GameCreateInput!): Game
+  createGames(data: [GameCreateInput!]!): [Game]
+  updateGame(where: GameWhereUniqueInput!, data: GameUpdateInput!): Game
+  updateGames(data: [GameUpdateArgs!]!): [Game]
+  deleteGame(where: GameWhereUniqueInput!): Game
+  deleteGames(where: [GameWhereUniqueInput!]!): [Game]
+  createMetricType(data: MetricTypeCreateInput!): MetricType
+  createMetricTypes(data: [MetricTypeCreateInput!]!): [MetricType]
+  updateMetricType(where: MetricTypeWhereUniqueInput!, data: MetricTypeUpdateInput!): MetricType
+  updateMetricTypes(data: [MetricTypeUpdateArgs!]!): [MetricType]
+  deleteMetricType(where: MetricTypeWhereUniqueInput!): MetricType
+  deleteMetricTypes(where: [MetricTypeWhereUniqueInput!]!): [MetricType]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -310,6 +465,15 @@ type Query {
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
   tagsCount(where: TagWhereInput! = {}): Int
+  metrics(where: MetricWhereInput! = {}, orderBy: [MetricOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MetricWhereUniqueInput): [Metric!]
+  metric(where: MetricWhereUniqueInput!): Metric
+  metricsCount(where: MetricWhereInput! = {}): Int
+  games(where: GameWhereInput! = {}, orderBy: [GameOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GameWhereUniqueInput): [Game!]
+  game(where: GameWhereUniqueInput!): Game
+  gamesCount(where: GameWhereInput! = {}): Int
+  metricTypes(where: MetricTypeWhereInput! = {}, orderBy: [MetricTypeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MetricTypeWhereUniqueInput): [MetricType!]
+  metricType(where: MetricTypeWhereUniqueInput!): MetricType
+  metricTypesCount(where: MetricTypeWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
