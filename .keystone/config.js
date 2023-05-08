@@ -135,16 +135,20 @@ var lists = {
   }),
   //Beginning myschema
   Metric: (0, import_core.list)({
-    // WARNING
-    //   for this starter project, anyone can create, query, update and delete anything
-    //   if you want to prevent random people on the internet from accessing your data,
-    //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
     access: import_access.allowAll,
-    // this is the fields for our Metrics list
     fields: {
+      metric_value: (0, import_fields.text)({ validation: { isRequired: true } }),
+      metric_type: (0, import_fields.relationship)({
+        ref: "MetricType",
+        many: false
+      }),
+      game: (0, import_fields.relationship)({
+        ref: "Game",
+        many: false
+      }),
       drive: (0, import_fields.integer)({ validation: { isRequired: true } }),
       play: (0, import_fields.integer)({ validation: { isRequired: true } }),
-      defensiveCall: (0, import_fields.text)({ validation: { isRequired: true } })
+      second_mark: (0, import_fields.integer)({ validation: { isRequired: false } })
     }
   }),
   Game: (0, import_core.list)({
@@ -173,6 +177,7 @@ var lists = {
     access: import_access.allowAll,
     fields: {
       name: (0, import_fields.text)()
+      // icon: image({ storage: 'metrictypes_storage' }), // TODO: configuration storage
     }
   })
 };

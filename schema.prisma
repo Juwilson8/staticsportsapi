@@ -39,23 +39,33 @@ model Tag {
 }
 
 model Metric {
-  id            String @id @default(cuid())
+  id            String      @id @default(cuid())
+  metric_value  String      @default("")
+  metric_type   MetricType? @relation("Metric_metric_type", fields: [metric_typeId], references: [id])
+  metric_typeId String?     @map("metric_type")
+  game          Game?       @relation("Metric_game", fields: [gameId], references: [id])
+  gameId        String?     @map("game")
   drive         Int
   play          Int
-  defensiveCall String @default("")
+  second_mark   Int?
+
+  @@index([metric_typeId])
+  @@index([gameId])
 }
 
 model Game {
-  id       String  @id @default(cuid())
-  title    String  @default("")
-  content  String  @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  author   User?   @relation("Game_author", fields: [authorId], references: [id])
-  authorId String? @map("author")
+  id               String   @id @default(cuid())
+  title            String   @default("")
+  content          String   @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author           User?    @relation("Game_author", fields: [authorId], references: [id])
+  authorId         String?  @map("author")
+  from_Metric_game Metric[] @relation("Metric_game")
 
   @@index([authorId])
 }
 
 model MetricType {
-  id   String @id @default(cuid())
-  name String @default("")
+  id                      String   @id @default(cuid())
+  name                    String   @default("")
+  from_Metric_metric_type Metric[] @relation("Metric_metric_type")
 }

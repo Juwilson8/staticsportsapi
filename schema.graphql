@@ -256,9 +256,12 @@ input TagCreateInput {
 
 type Metric {
   id: ID!
+  metric_value: String
+  metric_type: MetricType
+  game: Game
   drive: Int
   play: Int
-  defensiveCall: String
+  second_mark: Int
 }
 
 input MetricWhereUniqueInput {
@@ -270,9 +273,12 @@ input MetricWhereInput {
   OR: [MetricWhereInput!]
   NOT: [MetricWhereInput!]
   id: IDFilter
+  metric_value: StringFilter
+  metric_type: MetricTypeWhereInput
+  game: GameWhereInput
   drive: IntFilter
   play: IntFilter
-  defensiveCall: StringFilter
+  second_mark: IntNullableFilter
 }
 
 input IntFilter {
@@ -286,17 +292,44 @@ input IntFilter {
   not: IntFilter
 }
 
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
 input MetricOrderByInput {
   id: OrderDirection
+  metric_value: OrderDirection
   drive: OrderDirection
   play: OrderDirection
-  defensiveCall: OrderDirection
+  second_mark: OrderDirection
 }
 
 input MetricUpdateInput {
+  metric_value: String
+  metric_type: MetricTypeRelateToOneForUpdateInput
+  game: GameRelateToOneForUpdateInput
   drive: Int
   play: Int
-  defensiveCall: String
+  second_mark: Int
+}
+
+input MetricTypeRelateToOneForUpdateInput {
+  create: MetricTypeCreateInput
+  connect: MetricTypeWhereUniqueInput
+  disconnect: Boolean
+}
+
+input GameRelateToOneForUpdateInput {
+  create: GameCreateInput
+  connect: GameWhereUniqueInput
+  disconnect: Boolean
 }
 
 input MetricUpdateArgs {
@@ -305,9 +338,22 @@ input MetricUpdateArgs {
 }
 
 input MetricCreateInput {
+  metric_value: String
+  metric_type: MetricTypeRelateToOneForCreateInput
+  game: GameRelateToOneForCreateInput
   drive: Int
   play: Int
-  defensiveCall: String
+  second_mark: Int
+}
+
+input MetricTypeRelateToOneForCreateInput {
+  create: MetricTypeCreateInput
+  connect: MetricTypeWhereUniqueInput
+}
+
+input GameRelateToOneForCreateInput {
+  create: GameCreateInput
+  connect: GameWhereUniqueInput
 }
 
 type Game {

@@ -16,6 +16,7 @@ import {
   password,
   timestamp,
   select,
+  image,
   integer,
 } from '@keystone-6/core/fields';
 
@@ -150,34 +151,28 @@ export const lists: Lists = {
 
   //Beginning myschema
   Metric: list({
-    // WARNING
-    //   for this starter project, anyone can create, query, update and delete anything
-    //   if you want to prevent random people on the internet from accessing your data,
-    //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
     access: allowAll,
-  
-    // this is the fields for our Metrics list
     fields: {
+      metric_value: text({ validation: { isRequired: true }}),
+      metric_type: relationship({
+        ref: 'MetricType',
+        many: false
+      }),
+      game: relationship({
+        ref: 'Game',
+        many: false
+      }),
       drive: integer({ validation: { isRequired: true } }),
-  
       play: integer({ validation: { isRequired: true } }),
-  
-      defensiveCall: text({ validation: { isRequired: true } }),
-      
+      second_mark: integer({ validation: { isRequired: false } }),
     },
   }),
   
 
-  
-
   Game: list({
-   
     access: allowAll,
-
     fields: {
       title: text({ validation: { isRequired: true } }),
-
-
       content: document({
         formatting: true,
         layouts: [
@@ -193,9 +188,6 @@ export const lists: Lists = {
 
       author: relationship({
         ref: 'User',
-
-
-  
         many: false,
       }),
     },
@@ -204,11 +196,9 @@ export const lists: Lists = {
   MetricType: list({
    
     access: allowAll,
-
-
     fields: {
       name: text(),
-      
+      // icon: image({ storage: 'metrictypes_storage' }), // TODO: configuration storage
     },
   }),
 };
