@@ -49,106 +49,10 @@ var lists = {
         isIndexed: "unique"
       }),
       password: (0, import_fields.password)({ validation: { isRequired: true } }),
-      // we can use this field to see what Posts this User has authored
-      //   more on that in the Post list below
-      posts: (0, import_fields.relationship)({ ref: "Post.author", many: true }),
       createdAt: (0, import_fields.timestamp)({
         // this sets the timestamp to Date.now() when the user is first created
         defaultValue: { kind: "now" }
       })
-    }
-  }),
-  Post: (0, import_core.list)({
-    // WARNING
-    //   for this starter project, anyone can create, query, update and delete anything
-    //   if you want to prevent random people on the internet from accessing your data,
-    //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-    access: import_access.allowAll,
-    // this is the fields for our Post list
-    fields: {
-      title: (0, import_fields.text)({ validation: { isRequired: true } }),
-      // the document field can be used for making rich editable content
-      //   you can find out more at https://keystonejs.com/docs/guides/document-fields
-      content: (0, import_fields_document.document)({
-        formatting: true,
-        layouts: [
-          [1, 1],
-          [1, 1, 1],
-          [2, 1],
-          [1, 2],
-          [1, 2, 1]
-        ],
-        links: true,
-        dividers: true
-      }),
-      // with this field, you can set a User as the author for a Post
-      author: (0, import_fields.relationship)({
-        // we could have used 'User', but then the relationship would only be 1-way
-        ref: "User.posts",
-        // this is some customisations for changing how this will look in the AdminUI
-        ui: {
-          displayMode: "cards",
-          cardFields: ["name", "email"],
-          inlineEdit: { fields: ["name", "email"] },
-          linkToItem: true,
-          inlineConnect: true
-        },
-        // a Post can only have one author
-        //   this is the default, but we show it here for verbosity
-        many: false
-      }),
-      // with this field, you can add some Tags to Posts
-      tags: (0, import_fields.relationship)({
-        // we could have used 'Tag', but then the relationship would only be 1-way
-        ref: "Tag.posts",
-        // a Post can have many Tags, not just one
-        many: true,
-        // this is some customisations for changing how this will look in the AdminUI
-        ui: {
-          displayMode: "cards",
-          cardFields: ["name"],
-          inlineEdit: { fields: ["name"] },
-          linkToItem: true,
-          inlineConnect: true,
-          inlineCreate: { fields: ["name"] }
-        }
-      })
-    }
-  }),
-  // this last list is our Tag list, it only has a name field for now
-  Tag: (0, import_core.list)({
-    // WARNING
-    //   for this starter project, anyone can create, query, update and delete anything
-    //   if you want to prevent random people on the internet from accessing your data,
-    //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-    access: import_access.allowAll,
-    // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
-    ui: {
-      isHidden: true
-    },
-    // this is the fields for our Tag list
-    fields: {
-      name: (0, import_fields.text)(),
-      // this can be helpful to find out all the Posts associated with a Tag
-      posts: (0, import_fields.relationship)({ ref: "Post.tags", many: true })
-    }
-  }),
-  //Beginning myschema
-  Metric: (0, import_core.list)({
-    access: import_access.allowAll,
-    fields: {
-      metric_value: (0, import_fields.text)({ validation: { isRequired: true } }),
-      metric_type: (0, import_fields.relationship)({
-        ref: "MetricType",
-        many: false
-      }),
-      game: (0, import_fields.relationship)({
-        ref: "Game",
-        many: false
-      }),
-      drive: (0, import_fields.integer)({ validation: { isRequired: true } }),
-      play: (0, import_fields.integer)({ validation: { isRequired: true } }),
-      second_mark: (0, import_fields.integer)({ validation: { isRequired: false } })
     }
   }),
   Game: (0, import_core.list)({
@@ -178,6 +82,44 @@ var lists = {
     fields: {
       name: (0, import_fields.text)()
       // icon: image({ storage: 'metrictypes_storage' }), // TODO: configuration storage
+    }
+  }),
+  Metric: (0, import_core.list)({
+    access: import_access.allowAll,
+    ui: {
+      description: "",
+      isHidden: ({ session: session2, context }) => false,
+      hideCreate: ({ session: session2, context }) => false,
+      // TODO: display conditionally on user permissions?
+      hideDelete: ({ session: session2, context }) => false,
+      // TODO: display conditionally on user permissions?
+      createView: {
+        defaultFieldMode: ({ session: session2, context }) => "edit"
+      },
+      itemView: {
+        defaultFieldMode: ({ session: session2, context, item }) => "edit"
+      },
+      listView: {
+        initialColumns: ["game", "drive", "play", "metric_type", "metric_value"],
+        defaultFieldMode: ({ session: session2, context }) => "read",
+        searchFields: ["game.name", "metric_value", "metric_type"],
+        labelField: "metric_value",
+        initialSort: { field: "metric_type", direction: "ASC" }
+      }
+    },
+    fields: {
+      metric_value: (0, import_fields.text)({ validation: { isRequired: true } }),
+      metric_type: (0, import_fields.relationship)({
+        ref: "MetricType",
+        many: false
+      }),
+      game: (0, import_fields.relationship)({
+        ref: "Game",
+        many: false
+      }),
+      drive: (0, import_fields.integer)({ validation: { isRequired: true } }),
+      play: (0, import_fields.integer)({ validation: { isRequired: true } }),
+      second_mark: (0, import_fields.integer)({ validation: { isRequired: false } })
     }
   })
 };
@@ -223,7 +165,7 @@ var keystone_default = withAuth(
       //   for more information on what database might be appropriate for you
       //   see https://keystonejs.com/docs/guides/choosing-a-database#title
       provider: "sqlite",
-      url: "file:./keystone.db"
+      url: "file:./mydatabase.db"
     },
     lists,
     session

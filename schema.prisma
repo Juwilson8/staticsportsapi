@@ -16,41 +16,8 @@ model User {
   name             String    @default("")
   email            String    @unique @default("")
   password         String
-  posts            Post[]    @relation("Post_author")
   createdAt        DateTime? @default(now())
   from_Game_author Game[]    @relation("Game_author")
-}
-
-model Post {
-  id       String  @id @default(cuid())
-  title    String  @default("")
-  content  String  @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  author   User?   @relation("Post_author", fields: [authorId], references: [id])
-  authorId String? @map("author")
-  tags     Tag[]   @relation("Post_tags")
-
-  @@index([authorId])
-}
-
-model Tag {
-  id    String @id @default(cuid())
-  name  String @default("")
-  posts Post[] @relation("Post_tags")
-}
-
-model Metric {
-  id            String      @id @default(cuid())
-  metric_value  String      @default("")
-  metric_type   MetricType? @relation("Metric_metric_type", fields: [metric_typeId], references: [id])
-  metric_typeId String?     @map("metric_type")
-  game          Game?       @relation("Metric_game", fields: [gameId], references: [id])
-  gameId        String?     @map("game")
-  drive         Int
-  play          Int
-  second_mark   Int?
-
-  @@index([metric_typeId])
-  @@index([gameId])
 }
 
 model Game {
@@ -68,4 +35,19 @@ model MetricType {
   id                      String   @id @default(cuid())
   name                    String   @default("")
   from_Metric_metric_type Metric[] @relation("Metric_metric_type")
+}
+
+model Metric {
+  id            String      @id @default(cuid())
+  metric_value  String      @default("")
+  metric_type   MetricType? @relation("Metric_metric_type", fields: [metric_typeId], references: [id])
+  metric_typeId String?     @map("metric_type")
+  game          Game?       @relation("Metric_game", fields: [gameId], references: [id])
+  gameId        String?     @map("game")
+  drive         Int
+  play          Int
+  second_mark   Int?
+
+  @@index([metric_typeId])
+  @@index([gameId])
 }
