@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "keystone dev",
     "start": "keystone start",
+    "restart": "keystone build && keystone start",
     "build": "keystone build",
     "postinstall": "keystone build --no-ui --frozen"
   },
