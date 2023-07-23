@@ -12,8 +12,9 @@ To set your password to "12345678", run `UPDATE User set password = "$2a$10$cWWv
 
 
 ### RESET
-`rm -rf node_modules && rm -rf package-lock.json && rm -rf yarn.lock`
-`yarn install`
-`yarn run dev`
-`npx ts-node sheetimports.ts`
+- `rm -rf node_modules && rm -rf package-lock.json && rm -rf`
+- `yarn.lock`
+- `yarn install`
+- `yarn run dev`
+- `npx ts-node sheetimports.ts`
 
