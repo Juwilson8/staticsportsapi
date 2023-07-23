@@ -41,7 +41,9 @@ var lists = {
     fields: {
       // by adding isRequired, we enforce that every User should have a name
       //   if no name is provided, an error will be displayed
-      name: (0, import_fields.text)({ validation: { isRequired: true } }),
+      name: (0, import_fields.text)(
+        { validation: { isRequired: true } }
+      ),
       email: (0, import_fields.text)({
         validation: { isRequired: true },
         // by adding isIndexed: 'unique', we're saying that no user can have the same
@@ -53,6 +55,14 @@ var lists = {
         // this sets the timestamp to Date.now() when the user is first created
         defaultValue: { kind: "now" }
       })
+    },
+    graphql: {
+      plural: "Users",
+      fields: {
+        id: { type: "ID" },
+        name: { type: "String" },
+        email: { type: "String" }
+      }
     }
   }),
   Game: (0, import_core.list)({

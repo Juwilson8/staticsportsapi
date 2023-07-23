@@ -5,12 +5,15 @@
   "license": "copy-right Julian Wilson",
   "scripts": {
     "dev": "keystone dev",
-    "start": "keystone start",
+    "start": "keystone start --with-migrations",
     "restart": "keystone build && keystone start",
     "build": "keystone build",
-    "postinstall": "keystone build --no-ui --frozen"
+    "import": "sheetimport",
+    "postinstall": "keystone build --no-ui --frozen",
+    "deploy": "keystone build && keystone prisma migrate deploy",
+    "generate": "keystone prisma migrate dev"
   },
- "resolutions": {
+  "resolutions": {
     "next": "13.4.12"
   },
   "dependencies": {
@@ -20,6 +23,7 @@
     "next": "^13.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }
 }
